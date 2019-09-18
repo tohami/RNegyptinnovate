@@ -6,14 +6,41 @@ import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native';
 import { colors } from '../utils';
 
 import Avatar from './Avatar';
+import * as Animatable from "react-native-animatable";
 
 export default class NewsItem extends Component {
 
+  handleViewRef = ref => this.rootAnimateView = ref;
+
+  componentDidUpdate(prevProps) {
+    const { needAnimate , animateIn , animatePosition } = this.props;
+    if(needAnimate){
+      if(animateIn){
+        this.rootAnimateView.fadeOutUp(800 , animatePosition*500)
+      }else{
+        this.rootAnimateView.fadeInUp(800 , animatePosition*500)
+      }
+    }
+  } 
   render() {
-    const { news, onSelect } = this.props;
+    const { news, needAnimate , animateIn , animatePosition , onSelect } = this.props;
+    console.log("zzz" + animatePosition)
     return (
-      <View style={styles.row}>
-        <TouchableOpacity onPress={() => onSelect(news)} style={[styles.container, styles.row, styles.center]}>
+      <Animatable.View 
+      style={[styles.row , {opacity:0}]} 
+      ref={this.handleViewRef} 
+      useNativeDriver
+      animation= {needAnimate &&  animateIn ? "bounce" : "wobble"}
+      delay = {animatePosition*800}
+      duration={500}>
+        <TouchableOpacity
+          onPress={() => {
+            // onSelect(news)
+            this.rootAnimateView.fadeOutUp(800).then(endState => {
+              if(endState.finished ) this.rootAnimateView.fadeInUp(800)
+            })
+          }}
+          style={[styles.container, styles.row, styles.center]}>
           <View style={[styles.center, styles.row]}>
             <Avatar rounded height={90} width={90} source={{ uri: news.ImageUrl }} />
             <View style={[styles.column, styles.newsContent]}>
@@ -27,7 +54,7 @@ export default class NewsItem extends Component {
           </View>
         </TouchableOpacity>
         <Image style={styles.newsLabel} source={require('../../images/news_article_label.png')} />
-      </View>
+      </Animatable.View>
 
     );
   }

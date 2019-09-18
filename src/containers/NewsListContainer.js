@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { getNewsList } from '../actions';
+import { getNewsList , onNewsListScrollChanged } from '../actions';
 
 import NewsList from '../components/NewsList';
 
@@ -13,6 +13,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   getNewsList,
+  onNewsListScrollChanged
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsList);

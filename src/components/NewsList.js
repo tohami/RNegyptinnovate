@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { ActivityIndicator, FlatList , StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 
-import NewsItem from './NewsItem';
+import NewsItem from '../containers/NewsListItemContainer';
 
 import routes from '../navigation/routes';
 
@@ -10,7 +10,7 @@ import NavigationService from '../navigation/navigationService';
 import { colors } from '../utils';
 
 class NewsList extends Component {
-  state = { }
+  state = {}
 
   componentDidMount() {
     const { getNewsList } = this.props;
@@ -19,6 +19,10 @@ class NewsList extends Component {
 
   toNewsDetails = newsItem => {
     NavigationService.navigate(routes.NewsDetails, { newsItem })
+  }
+
+  onViewableItemsChanged = ({ viewableItems, changed }) => {
+    if(changed)  this.props.onNewsListScrollChanged(changed)  ;
   }
 
   render() {
@@ -44,6 +48,10 @@ class NewsList extends Component {
           data={newsList}
           keyExtractor={(item) => `k=${item.Nid}`}
           renderItem={({ item }) => <NewsItem onSelect={this.toNewsDetails} news={item} />}
+          onViewableItemsChanged={this.onViewableItemsChanged}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 50
+          }}
         />
       </View>
     )
@@ -54,7 +62,7 @@ class NewsList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:colors.secondaryText
+    backgroundColor: colors.secondaryText
   },
   containerLoading: {
     alignItems: 'center',

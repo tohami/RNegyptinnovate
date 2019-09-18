@@ -2,6 +2,7 @@ import {
   REQUEST_NEWS_LIST,
   REQUEST_NEWS_LIST_SUCCESS,
   REQUEST_NEWS_LIST_FAIL,
+  NEWS_LIST_SCROLL_CHANGE,
 } from '../actions/types';
 
 const initialState = {
@@ -27,6 +28,11 @@ const newsListReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         isFetching: false,
         error: action.error,
+      });
+
+    case NEWS_LIST_SCROLL_CHANGE:
+      return Object.assign({}, state, {
+        scrollChangedItems: action.changedItems,
       });
 
     default:

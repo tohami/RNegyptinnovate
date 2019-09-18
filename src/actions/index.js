@@ -6,6 +6,7 @@ import {
   REQUEST_NEWS_DETAILS,
   REQUEST_NEWS_DETAILS_SUCCESS,
   REQUEST_NEWS_DETAILS_FAIL,
+  NEWS_LIST_SCROLL_CHANGE
 } from './types';
 
 import { fetchNewsDetails, fetchNews } from '../api';
@@ -38,6 +39,11 @@ export const getNewsDetails = (newsId) => async (dispatch) => {
   }
 };
 
+export const onNewsListScrollChanged = (changedItems) => async (dispatch) => {
+  console.log(changedItems);
+  dispatch(newsListScrollChanged(changedItems));
+
+};
 
 /* news list dispach */
 
@@ -70,3 +76,11 @@ export const requestNewsDetailsFailed = error => ({
   type: REQUEST_NEWS_DETAILS_FAIL,
   error,
 });
+
+
+//news List scroll 
+
+export const newsListScrollChanged = (changedItems) => ({
+  type: NEWS_LIST_SCROLL_CHANGE,
+  changedItems,
+})
